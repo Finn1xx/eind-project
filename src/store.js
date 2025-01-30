@@ -62,7 +62,30 @@ movies: [
     text: "Armed with only the word Tenet, and fighting for survival...",
     image: "/src/assets/tenet.jpg",
     video: "/src/assets/tenet.mp4",
-  }
+  },
+  {
+    id: "9",
+    title: "The Matrix",
+    text: "When a beautiful stranger leads computer hacker Neo to a forbidding underworld, he discovers the shocking truth--the life he knows is the elaborate deception of an evil cyber-intelligence.",
+    image: "/src/assets/matrix.jpg",
+    video: "/src/assets/matrix.mp4",
+  },
+  {
+    id: "10",
+    title: "Zodiac",
+    text: "Between 1968 and 1983, a San Francisco cartoonist becomes an amateur detective obsessed with tracking down the Zodiac Killer, an unidentified individual who terrorizes Northern California with a killing spree.",
+    image: "/src/assets/zodiac.jpg",
+    video: "/src/assets/zodiac.mp4",
+  },
+  {
+    id: "10",
+    title: "The Dark Knight",
+    text: "When a menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman, James Gordon and Harvey Dent must work together to put an end to the madness.",
+    image: "/src/assets/dark.jpg",
+    video: "/src/assets/dark.mp4",
+  },
+  
+
 ]
     };
   },

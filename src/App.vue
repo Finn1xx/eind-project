@@ -7,7 +7,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 export default {
   setup() {
     const store = useStore();
-    const user = ref(store.getters.getUser); // Haalt direct de gebruiker op
+    const user = ref(store.getters.getUser);
     const movies = ref(store.getters.getMovies);
     const currentVideo = ref(null);
 
@@ -21,7 +21,7 @@ export default {
       onAuthStateChanged(auth, (currentUser) => {
         if (currentUser) {
           store.commit("setUser", currentUser);
-          user.value = currentUser; // Update de user ref
+          user.value = currentUser;
         } else {
           store.commit("logoutUser");
           user.value = null;
@@ -36,7 +36,7 @@ export default {
       window.location.href = "/login";
     };
 
-    // **Fix: update de `user` direct als Vuex verandert**
+    // Update de `user` als Vuex verandert
     watch(
       () => store.getters.getUser,
       (newUser) => {
@@ -84,8 +84,10 @@ export default {
             <li class="nav-item" v-if="!user">
               <RouterLink class="nav-link" to="/login">Login</RouterLink>
             </li>
-            <li class="nav-item" v-if="user">
-              <a class="nav-link" @click="logout">Uitloggen</a>
+            <li class="nav-item" v-if="user" style="display: flex; align-items: center;">
+              <!-- ✅ E-mail van de ingelogde gebruiker -->
+              <span class="user-email">{{ user.email }}</span>  
+              <a class="nav-link logout-btn" @click="logout">Uitloggen</a>
             </li>
           </ul>
         </div>

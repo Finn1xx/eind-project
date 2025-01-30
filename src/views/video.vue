@@ -9,11 +9,20 @@ export default {
     const likedMovies = computed(() => store.getters.getLikedMovies);
     const currentVideo = computed(() => store.getters.getCurrentVideo);
     const selectedMovie = ref(null);
-    const isLoggedIn = computed(() => store.getters.isAuthenticated); // Gebruik de getter hier
+    const isLoggedIn = computed(() => store.getters.isAuthenticated);
+    const activeIndex = ref(0); // Houdt de actieve slide bij
 
-    // Controleer of de gebruiker correct is ingelogd
+    // Bijwerken als de gebruiker op een pijltje klikt
+    const updateActiveIndex = (index) => {
+      activeIndex.value = index;
+    };
+
     onMounted(() => {
-      console.log("Is logged in:", isLoggedIn.value); // Debugging
+      // Luisteren naar slide events van Bootstrap
+      const carouselElement = document.getElementById("carouselExampleCaptions");
+      carouselElement.addEventListener("slid.bs.carousel", (event) => {
+        activeIndex.value = event.to;
+      });
     });
 
     const setVideo = (movie) => {
@@ -47,6 +56,8 @@ export default {
       isDisliked,
       selectedMovie,
       isLoggedIn,
+      activeIndex,
+      updateActiveIndex,
     };
   },
 };
@@ -62,7 +73,7 @@ export default {
       type="button"
       data-bs-target="#carouselExampleCaptions"
       :data-bs-slide-to="index"
-      :class="{ active: index === 0 }"
+      :class="{ active: activeIndex === index }"
       :aria-label="'Slide ' + (index + 1)"
     ></button>
   </div>
@@ -101,7 +112,7 @@ export default {
         class="card col-4 col-lg-2 col-md-1 card_hover"
         :style="{
         backgroundImage: `linear-gradient(185deg, rgba(0, 212, 255, 0.4) 13%, rgba(7, 7, 135, 0.8) 57%), url(${movie.image})`,
-        width: '18rem',
+        width: '20rem',
         backgroundSize: 'cover',
         backgroundPosition: 'center'
 } "
@@ -120,8 +131,30 @@ export default {
       <div id="videoplr" class="videoplayer col-12">
         <video controls autoplay :src="currentVideo"></video>
       </div>
+      <div class="btn">
+          <a class="getup" href="#">Click here to get Up</a>
+        </div>
     </div>
   </div>
+  <footer>
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-12">
+          <p>©2023 FinnSiepers Netherlands, Inc. All rights reserved.</p>
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+          <ul class="d-flex justify-content-center">
+            <li><a href="">Privacy Policy</a></li>
+            <li><a href="">Terms & Conditions</a></li>
+            <li><a href="">Cookies Policy</a></li>
+            <li><a href="">Return Policy</a></li>
+            <li><a href="">Disclaimer</a></li>
+            <li><a href="">EULA</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
 </template>
 
 <style scoped>
@@ -131,7 +164,7 @@ a{
 }
 
 .allcards {
-  transform: translateY(-125px);
+  transform: translateY(-50px);
   gap: 4rem;
   display: flex;
   justify-content: center;
@@ -154,13 +187,18 @@ a{
 .card_hover:hover .card-body {
   opacity: 1;
   transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+
 }
 .card_hover:hover {
   transform: scale(1.1);
   transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+  width: 28rem !important; 
+
+  
 }
 .card_hover {
   transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+  
 }
 
 .like-btn,
