@@ -45,9 +45,6 @@ export default {
   <header>
     <nav class="navbar navigatiebalk neon-btn navbar-expand-lg bg-light">
       <div class="container-fluid navigatiebalk">
-        <a class="navbar-brand" href="#">
-          <img class="homepage_icon" src="../src/assets/homepage_icon.png" alt=""/>
-        </a>
         <button
           class="navbar-toggler"
           type="button"
@@ -74,7 +71,7 @@ export default {
               <RouterLink class="nav-link" to="/login">Login</RouterLink>
             </li>
             <li class="nav-item" v-if="user">
-              <button class="nav-link btn btn-danger" @click="logout">Uitloggen</button>
+              <a class="nav-link" @click="logout">Uitloggen</a>
             </li>
           </ul>
         </div>
@@ -87,11 +84,6 @@ export default {
 
 <style scoped>
 
-
-.homepage_icon {
-  height: 40px;
-  margin-left: 10px;
-}
 
 button {
   background: red;

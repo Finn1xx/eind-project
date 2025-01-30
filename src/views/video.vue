@@ -1,60 +1,66 @@
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 
 export default {
   setup() {
     const store = useStore();
-    let movies = computed(() => store.getters.getMovies);
-    let likedMovies = computed(() => store.getters.getLikedMovies);
-    let currentVideo = ref(null);
-    let selectedMovie = ref(null); // Hier houden we bij welke film geselecteerd is
+    const movies = computed(() => store.getters.getMovies);
+    const likedMovies = computed(() => store.getters.getLikedMovies);
+    const currentVideo = computed(() => store.getters.getCurrentVideo);
+    const selectedMovie = ref(null);
+    const isLoggedIn = computed(() => store.getters.isAuthenticated); // Gebruik de getter hier
 
-    // Functie om de video van de geselecteerde film in te stellen
+    // Controleer of de gebruiker correct is ingelogd
+    onMounted(() => {
+      console.log("Is logged in:", isLoggedIn.value); // Debugging
+    });
+
     const setVideo = (movie) => {
-      selectedMovie.value = movie; // Stel de geselecteerde film in
       store.commit("setVideo", movie.video);
-      currentVideo.value = movie.video; // Stel de huidige video URL in
+      selectedMovie.value = movie;
     };
 
-    // Functie om een film te liken
     const likeMovie = (movie) => {
       store.commit("likeMovie", movie);
     };
 
-    // Functie om een film te disliken
     const dislikeMovie = (movie) => {
       store.commit("dislikeMovie", movie);
     };
 
-    // Functie om te controleren of een film geliket is
     const isLiked = (movie) => {
-      return likedMovies.value.find((m) => m.id === movie.id)?.liked === true;
+      return likedMovies.value.some((m) => m.id === movie.id && m.liked);
+    };
+
+    const isDisliked = (movie) => {
+      return likedMovies.value.some((m) => m.id === movie.id && m.disliked);
     };
 
     return {
       movies,
-      setVideo,
-      selectedMovie,
-      currentVideo,
       likeMovie,
       dislikeMovie,
+      setVideo,
+      currentVideo,
       isLiked,
+      isDisliked,
+      selectedMovie,
+      isLoggedIn,
     };
   },
 };
 </script>
 
 <template>
-  <!-- Watch Movie knop bovenaan het scherm -->
-  <div class="watch-button-container">
+  <!-- <div class="watch-button-container">
     <button 
       v-if="selectedMovie" 
       @click="setVideo(selectedMovie)" 
       class="button_watch_movie">
       Watch Movie
     </button>
-  </div>
+  </div> -->
 
   <div class="carousel-indicators">
     <button
@@ -68,6 +74,8 @@ export default {
     ></button>
   </div>
 
+  <body>
+
   <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div
@@ -77,7 +85,6 @@ export default {
         :class="{ active: index === 0 }"
         :style="{ backgroundImage: 'url(' + movie.image + ')' }"
       >
-        <!-- De video wordt nu niet automatisch ingeladen, maar kan via de "Watch Movie" knop gestart worden -->
       </div>
     </div>
 
@@ -102,44 +109,79 @@ export default {
   </div>
 
   <div class="container-fluid background-color">
-    <div class="row allcards">
+    <div class="row allcards ">
       <div
         v-for="movie in movies"
         :key="movie.id"
         class="card col-4 col-lg-2 col-md-1 card_hover"
         :style="{
-          backgroundImage:
-            'linear-gradient(185deg, rgba(0, 212, 255, 0.4) 13%, rgba(7, 7, 135, 0.8) 57%), url(' + movie.image + ')',
-          width: '18rem',
-        }"
+        backgroundImage: `linear-gradient(185deg, rgba(0, 212, 255, 0.4) 13%, rgba(7, 7, 135, 0.8) 57%), url(${movie.image})`,
+        width: '18rem',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+}"
       >
         <div class="card-body">
           <h5 class="card-title">{{ movie.title }}</h5>
           <p class="card-text">{{ movie.text }}</p>
-
-          <!-- Like & Dislike Knoppen -->
           <button @click="likeMovie(movie)" class="like-btn" :class="{ liked: isLiked(movie) }">👍 Like</button>
-          <button @click="dislikeMovie(movie)" class="dislike-btn" :class="{ disliked: !isLiked(movie) && isLiked(movie) !== undefined }">👎 Dislike</button>
-
-          <!-- Watch Movie knop per film -->
-          <button @click="setVideo(movie)" class="button_watch_movie">Watch Movie</button>
+          <button @click="dislikeMovie(movie)" class="dislike-btn" :class="{ disliked: isDisliked(movie) }">👎 Dislike</button>
+          <a href="#videoplr" @click="setVideo(movie)" class="button_watch_movie">Watch Movie</a>
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div id="videoplr" class="p-0 videoplayer col-12">
-        <!-- Speel de geselecteerde video af -->
-        <video controls autoplay :src="currentVideo"></video>
+        <div id="videoplr" class="videoplayer col-12">
+          <video controls autoplay :src="currentVideo"></video>
+        </div>
+        <div class="btn btn-danger">
+          <a class="getup" href="#">Click here to get Up</a>
+        </div>
       </div>
     </div>
-  </div>
+  </body>
+
+  <footer>
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-12">
+          <p>©2023 FinnSiepers Netherlands, Inc. All rights reserved.</p>
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+          <ul class="d-flex justify-content-center">
+            <li><a href="">Privacy Policy</a></li>
+            <li><a href="">Terms & Conditions</a></li>
+            <li><a href="">Cookies Policy</a></li>
+            <li><a href="">Return Policy</a></li>
+            <li><a href="">Disclaimer</a></li>
+            <li><a href="">EULA</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
 
 </template>
 
 <style scoped>
+
+a{
+  text-decoration: none;
+}
+
 .allcards {
   transform: translateY(-125px);
+  gap: 4rem;
+  display: flex;
+  justify-content: center;
+
+
+}
+
+.allcards h5, p{
+  color: white;
+  text-align: center;
 }
 
 .card_hover .card-body {
@@ -237,5 +279,10 @@ footer {
 
 .button_watch_movie:hover {
   background-color: #0056b3;
+}
+
+.carousel-indicators{
+  top: 10%;
+
 }
 </style>
