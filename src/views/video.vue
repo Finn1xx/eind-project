@@ -1,8 +1,6 @@
 <script>
-import { computed, ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
-import { auth } from "./firebase";
-import { onAuthStateChanged } from "firebase/auth";
 
 export default {
   setup() {
@@ -11,37 +9,30 @@ export default {
     const likedMovies = computed(() => store.getters.getLikedMovies);
     const currentVideo = computed(() => store.getters.getCurrentVideo);
     const selectedMovie = ref(null);
-    const user = ref(null); // Gebruiker wordt hier opgeslagen
+    const isLoggedIn = computed(() => store.getters.isAuthenticated); // Gebruik de getter hier
 
-    // Controleer of de gebruiker is ingelogd bij het laden van de pagina
+    // Controleer of de gebruiker correct is ingelogd
     onMounted(() => {
-      onAuthStateChanged(auth, (currentUser) => {
-        user.value = currentUser;
-      });
+      console.log("Is logged in:", isLoggedIn.value); // Debugging
     });
 
-    // Functie om de video in te stellen
     const setVideo = (movie) => {
       store.commit("setVideo", movie.video);
       selectedMovie.value = movie;
     };
 
-    // Functie om een film te liken
     const likeMovie = (movie) => {
       store.commit("likeMovie", movie);
     };
 
-    // Functie om een film te disliken
     const dislikeMovie = (movie) => {
       store.commit("dislikeMovie", movie);
     };
 
-    // Functie om te controleren of een film al is geliket
     const isLiked = (movie) => {
       return likedMovies.value.some((m) => m.id === movie.id && m.liked);
     };
 
-    // Functie om te controleren of een film al is gedisliket
     const isDisliked = (movie) => {
       return likedMovies.value.some((m) => m.id === movie.id && m.disliked);
     };
@@ -55,13 +46,22 @@ export default {
       isLiked,
       isDisliked,
       selectedMovie,
-      user,
+      isLoggedIn,
     };
   },
 };
 </script>
 
 <template>
+  <!-- <div class="watch-button-container">
+    <button 
+      v-if="selectedMovie" 
+      @click="setVideo(selectedMovie)" 
+      class="button_watch_movie">
+      Watch Movie
+    </button>
+  </div> -->
+
   <div class="carousel-indicators">
     <button
       v-for="(movie, index) in movies"
@@ -74,6 +74,8 @@ export default {
     ></button>
   </div>
 
+  <body>
+
   <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div
@@ -82,7 +84,8 @@ export default {
         class="carousel-item"
         :class="{ active: index === 0 }"
         :style="{ backgroundImage: 'url(' + movie.image + ')' }"
-      ></div>
+      >
+      </div>
     </div>
 
     <button
@@ -116,7 +119,7 @@ export default {
         width: '18rem',
         backgroundSize: 'cover',
         backgroundPosition: 'center'
-      }"
+}"
       >
         <div class="card-body">
           <h5 class="card-title">{{ movie.title }}</h5>
@@ -129,14 +132,15 @@ export default {
     </div>
 
     <div class="row">
-      <div id="videoplr" class="videoplayer col-12">
-        <video controls autoplay :src="currentVideo"></video>
-      </div>
-      <div class="btn btn-danger">
-        <a class="getup" href="#">Click here to get Up</a>
+        <div id="videoplr" class="videoplayer col-12">
+          <video controls autoplay :src="currentVideo"></video>
+        </div>
+        <div class="btn btn-danger">
+          <a class="getup" href="#">Click here to get Up</a>
+        </div>
       </div>
     </div>
-  </div>
+  </body>
 
   <footer>
     <div class="container">
@@ -157,6 +161,7 @@ export default {
       </div>
     </div>
   </footer>
+
 </template>
 
 <style scoped>
