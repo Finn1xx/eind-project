@@ -53,15 +53,6 @@ export default {
 </script>
 
 <template>
-  <!-- <div class="watch-button-container">
-    <button 
-      v-if="selectedMovie" 
-      @click="setVideo(selectedMovie)" 
-      class="button_watch_movie">
-      Watch Movie
-    </button>
-  </div> -->
-
   <div class="carousel-indicators">
     <button
       v-for="(movie, index) in movies"
@@ -74,8 +65,6 @@ export default {
     ></button>
   </div>
 
-  <body>
-
   <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div
@@ -87,25 +76,6 @@ export default {
       >
       </div>
     </div>
-
-    <button
-      class="carousel-control-prev"
-      type="button"
-      data-bs-target="#carouselExampleCaptions"
-      data-bs-slide="prev"
-    >
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button
-      class="carousel-control-next"
-      type="button"
-      data-bs-target="#carouselExampleCaptions"
-      data-bs-slide="next"
-    >
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
   </div>
 
   <div class="container-fluid background-color">
@@ -119,49 +89,24 @@ export default {
         width: '18rem',
         backgroundSize: 'cover',
         backgroundPosition: 'center'
-}"
+} "
       >
         <div class="card-body">
           <h5 class="card-title">{{ movie.title }}</h5>
           <p class="card-text">{{ movie.text }}</p>
-          <button @click="likeMovie(movie)" class="like-btn" :class="{ liked: isLiked(movie) }">👍 Like</button>
-          <button @click="dislikeMovie(movie)" class="dislike-btn" :class="{ disliked: isDisliked(movie) }">👎 Dislike</button>
+          <button v-if="isLoggedIn" @click="likeMovie(movie)" class="like-btn" :class="{ liked: isLiked(movie) }">👍 Like</button>
+          <button v-if="isLoggedIn" @click="dislikeMovie(movie)" class="dislike-btn" :class="{ disliked: isDisliked(movie) }">👎 Dislike</button>
           <a href="#videoplr" @click="setVideo(movie)" class="button_watch_movie">Watch Movie</a>
         </div>
       </div>
     </div>
 
     <div class="row">
-        <div id="videoplr" class="videoplayer col-12">
-          <video controls autoplay :src="currentVideo"></video>
-        </div>
-        <div class="btn btn-danger">
-          <a class="getup" href="#">Click here to get Up</a>
-        </div>
+      <div id="videoplr" class="videoplayer col-12">
+        <video controls autoplay :src="currentVideo"></video>
       </div>
     </div>
-  </body>
-
-  <footer>
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-12">
-          <p>©2023 FinnSiepers Netherlands, Inc. All rights reserved.</p>
-        </div>
-        <div class="col-12 d-flex justify-content-center">
-          <ul class="d-flex justify-content-center">
-            <li><a href="">Privacy Policy</a></li>
-            <li><a href="">Terms & Conditions</a></li>
-            <li><a href="">Cookies Policy</a></li>
-            <li><a href="">Return Policy</a></li>
-            <li><a href="">Disclaimer</a></li>
-            <li><a href="">EULA</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </footer>
-
+  </div>
 </template>
 
 <style scoped>

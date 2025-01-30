@@ -1,34 +1,48 @@
 <script>
 import { useStore } from "vuex";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { auth } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
 export default {
   setup() {
     const store = useStore();
-    let movies = store.getters.getMovies;
-    let currentVideo = ref(null);
-    const user = ref(null);
+    const user = ref(store.getters.getUser); // Haalt direct de gebruiker op
+    const movies = ref(store.getters.getMovies);
+    const currentVideo = ref(null);
 
     const setVideo = (videoUrl) => {
       store.commit("setVideo", videoUrl);
       currentVideo.value = store.getters.getCurrentVideo;
     };
 
-    // Controleer de inlogstatus van de gebruiker
+    // Controleer loginstatus bij laden
     onMounted(() => {
       onAuthStateChanged(auth, (currentUser) => {
-        user.value = currentUser;
+        if (currentUser) {
+          store.commit("setUser", currentUser);
+          user.value = currentUser; // Update de user ref
+        } else {
+          store.commit("logoutUser");
+          user.value = null;
+        }
       });
     });
 
-    // Uitloggen functie
     const logout = async () => {
       await signOut(auth);
+      store.commit("logoutUser");
       user.value = null;
-      window.location.href = "/login"; // Stuur naar login na uitloggen
+      window.location.href = "/login";
     };
+
+    // **Fix: update de `user` direct als Vuex verandert**
+    watch(
+      () => store.getters.getUser,
+      (newUser) => {
+        user.value = newUser;
+      }
+    );
 
     return {
       movies,
@@ -83,8 +97,6 @@ export default {
 </template>
 
 <style scoped>
-
-
 button {
   background: red;
   color: white;
