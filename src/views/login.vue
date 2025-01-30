@@ -1,72 +1,81 @@
 <template>
-    <div class="login-container">
-      <h2>Login</h2>
-      <form @submit.prevent="login">
-        <input v-model="email" type="email" placeholder="E-mailadres" required />
-        <input v-model="password" type="password" placeholder="Wachtwoord" required />
-        <button type="submit">Inloggen</button>
-      </form>
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-    </div>
-  </template>
-  
-  <script>
-  import { ref } from "vue";
-  import { useRouter } from "vue-router"; // Vue Router importeren
-  import { signInWithEmailAndPassword } from "firebase/auth";
-  import { auth } from "../firebase";  // Zorg dat dit het juiste pad is
-  
-  export default {
-    setup() {
-      const email = ref("");
-      const password = ref("");
-      const errorMessage = ref("");
-      const router = useRouter(); // Router-instantie ophalen
-  
-      const login = async () => {
-        try {
-          const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
-          console.log("Ingelogd als:", userCredential.user);
-          errorMessage.value = "";
-  
-          // 🔹 Doorgestuurd naar homepage na succesvol inloggen 🔹
-          router.push("/");
-        } catch (error) {
-          errorMessage.value = "Fout bij inloggen: " + error.message;
-        }
-      };
-  
-      return { email, password, errorMessage, login };
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .login-container {
-    max-width: 300px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  input {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
-  }
-  button {
-    width: 100%;
-    padding: 10px;
-    background: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  .error {
-    color: red;
-    margin-top: 10px;
-  }
-  </style>
-  
+  <div class="login-container">
+    <h2>Login</h2>
+    <form @submit.prevent="handleLogin">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" v-model="email" id="email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" v-model="password" id="password" required />
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <p v-if="error" class="error">{{ error }}</p>
+    <p>Don't have an account? <RouterLink to="/register">Register</RouterLink></p>
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue';
+import { auth } from './firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useRouter } from 'vue-router';
+
+export default {
+  setup() {
+    const email = ref('');
+    const password = ref('');
+    const error = ref('');
+    const router = useRouter();
+
+    const handleLogin = async () => {
+      try {
+        await signInWithEmailAndPassword(auth, email.value, password.value);
+        router.push('/'); // Navigeer naar homepagina na succesvolle login
+      } catch (err) {
+        error.value = 'Invalid credentials, please try again.';
+      }
+    };
+
+    return {
+      email,
+      password,
+      error,
+      handleLogin,
+    };
+  },
+};
+</script>
+
+<style scoped>
+.login-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+form .form-group {
+  margin-bottom: 15px;
+}
+form button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+form button:hover {
+  background-color: #0056b3;
+}
+.error {
+  color: red;
+}
+</style>
