@@ -1,41 +1,39 @@
 <script>
+import { useStore } from "vuex";
 
+export default {
+  setup() {
+    const store = useStore();
+    let likedMovies = store.getters.getLikedMovies;
+
+    return {
+      likedMovies,
+    };
+  },
+};
 </script>
+
 <template>
-     <header>
-    <nav class="navbar navigatiebalk neon-btn navbar-expand-lg bg-light">
-      <div class="container-fluid navigatiebalk">
-        <a class="navbar-brand" href="#"
-          ><img
-            class="homepage_icon"
-            src="../src/assets/homepage_icon.png"
-            alt=""
-        /></a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse navigatiebalk_ul" id="navbarNav">
-          <ul class="navbar-nav navigatiebalk_ul_li">
-            <li class="nav-item">
-              <RouterLink class="nav-link" to="/">Home</RouterLink>
-            </li>
-            <li class="nav-item">
-              <RouterLink class="nav-link" to="/liked">liked movies</RouterLink>
-            </li>
-            <li class="nav-item">
-              <RouterLink class="nav-link" to="/register">register</RouterLink>
-            </li>
-          </ul>
-        </div>
+  <div class="container">
+    <h2>Mijn Gelikete Films</h2>
+    <div v-if="likedMovies.length === 0">
+      <p>Je hebt nog geen films geliket.</p>
+    </div>
+    <div v-else>
+      <div v-for="movie in likedMovies" :key="movie.id" class="movie-card">
+        <img :src="movie.image" :alt="movie.title" />
+        <h3>{{ movie.title }}</h3>
+        <p>Status: {{ movie.liked ? "❤️ Geliket" : "💔 Gedisliket" }}</p>
       </div>
-    </nav>
-  </header>
+    </div>
+  </div>
 </template>
+
+<style scoped>
+.movie-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+}
+</style>
