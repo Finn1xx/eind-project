@@ -53,7 +53,9 @@ export default {
 </script>
 
 <template>
-  <div class="carousel-indicators">
+
+
+<div class="carousel-indicators">
     <button
       v-for="(movie, index) in movies"
       :key="index"
@@ -65,6 +67,7 @@ export default {
     ></button>
   </div>
 
+  <!-- De filmcarrousel -->
   <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div
@@ -76,6 +79,18 @@ export default {
       >
       </div>
     </div>
+
+    <!-- Vorige knop -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+
+    <!-- Volgende knop -->
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
   </div>
 
   <div class="container-fluid background-color">
