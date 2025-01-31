@@ -86,7 +86,7 @@ export default {
             </li>
             <li class="nav-item" v-if="user" style="display: flex; align-items: center;">
               <!-- ✅ E-mail van de ingelogde gebruiker -->
-              <a class="nav-link logout-btn" @click="logout">Uitloggen</a>
+              <a class="nav-link logout-btn" @click="logout">Logout</a>
             </li>
           </ul>
           <!-- <span class="user-email">{{ user.email }}</span>   -->
@@ -127,6 +127,10 @@ button {
   padding: 5px 10px;
   cursor: pointer;
   font-weight: bold;
+}
+
+.navbar-nav a{
+  color: white !important;
 }
 
 .user-email{

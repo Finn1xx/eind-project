@@ -43,7 +43,7 @@ export default {
           <form @submit.prevent="login">
             <input v-model="email" type="email" placeholder="Email" required />
             <input v-model="password" type="password" placeholder="Wachtwoord" required />
-            <button type="submit">Inloggen</button>
+            <button type="submit">Login</button>
           </form>
           <p v-if="errorMessage">{{ errorMessage }}</p>
         </div>
@@ -56,7 +56,7 @@ export default {
 
 body{
   background: rgb(53, 76, 130);
-  height: 77vh;
+  height: 82.5vh;
 }
 
 .container{

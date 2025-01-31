@@ -19,12 +19,12 @@ export default {
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <h2>Mijn Gelikete Films</h2>
+          <h2>my liked movies</h2>
           <div v-if="likedMovies.length === 0">
-            <p>Je hebt nog geen films geliket.</p>
+            <p>You havent liked any movie.</p>
           </div>
-          <div v-else>
-            <div v-for="movie in likedMovies" :key="movie.id" class="movie-card">
+          <div class="row d-flex justify-content-center"  v-else>
+            <div v-for="movie in likedMovies" :key="movie.id" class="movie-card col-5">
               <img :src="movie.image" :alt="movie.title" />
               <h3>{{ movie.title }}</h3>
               <p>Status: {{ movie.liked ? "❤️ Geliket" : "💔 Gedisliket" }}</p>

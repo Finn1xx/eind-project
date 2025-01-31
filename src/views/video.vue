@@ -41,7 +41,32 @@ export default {
       }
     };
 
+
+    const goToCommentSection = () => {
+      if (selectedMovie.value) {
+        // Navigeren naar de filmpagina en de commentaarsectie via een hash (#)
+        router.push({ name: "movie", params: { id: selectedMovie.value.id }, hash: "#comments" });
+      }
+    };
+
+
+// Volgende afbeelding
+const nextImage = () => {
+  activeIndex.value = (activeIndex.value + 1) % movies.length;
+};
+
+// Vorige afbeelding
+const prevImage = () => {
+  activeIndex.value = (activeIndex.value - 1 + movies.length) % movies.length;
+};
+
+// Stel de actieve index in bij klikken op de nav blokjes
+const setActiveIndex = (index) => {
+  activeIndex.value = index;
+};
+
     return {
+      goToCommentSection,
       movies,
       likedMovies,
       currentVideo,
@@ -54,6 +79,9 @@ export default {
       isLiked,
       isDisliked,
       activeIndex,
+      nextImage,
+      prevImage,
+      setActiveIndex,
     };
   },
 };
@@ -80,6 +108,16 @@ export default {
         class="carousel-item"
         :class="{ active: index === 0 }"
         :style="{ backgroundImage: 'url(' + movie.image + ')' }"
+      ></div>
+    </div>
+
+    <div class="carousel-navigation">
+      <div
+        v-for="(movie, index) in movies"
+        :key="movie.id"
+        class="carousel-nav-item"
+        :class="{ 'active': activeIndex === index }"
+        @click="activeIndex(index)"
       ></div>
     </div>
 
@@ -119,11 +157,12 @@ export default {
 
     <div class="row">
       <div id="videoplr" class="videoplayer col-12">
-        <video controls autoplay :src="currentVideo"></video>
+        <video controls :src="currentVideo"></video>
       </div>
       <div class="btn">
         <a href="#" @click="scrollToTop" class="get-back-up-btn">⬆️ Get Back Up</a>
         <a v-if="selectedMovie" @click="goToFullMovie" class="watch-full-movie-btn">🎬 Watch Full Movie</a>
+        <a v-if="selectedMovie" @click="goToCommentSection" class="comment-btn">💬 Comment</a>
      </div>
     </div>
   </div>
@@ -249,6 +288,7 @@ a{
   cursor: pointer;
   transition: background-color 0.3s;
 }
+
 
 .button_watch_movie:hover {
   background-color: #0056b3;

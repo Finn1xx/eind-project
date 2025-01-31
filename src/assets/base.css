@@ -103,7 +103,6 @@
 .nav-item a{
   color: #e0eff2;
 font: italic bold Georgia, Serif;
-text-shadow: -4px 3px 0 rgba(171,36,177,1), -14px 7px 0 #0a0e27;
 transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
 border: solid rgba(43,17,101,1) 3px;
 }
