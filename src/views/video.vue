@@ -12,26 +12,19 @@ export default {
     const currentVideo = computed(() => store.getters.getCurrentVideo);
     const selectedMovie = ref(null);
     const isLoggedIn = computed(() => store.getters.isAuthenticated);
-    
+    const activeIndex = ref(0);
+
     const setVideo = (movie) => {
       store.commit("setVideo", movie.video);
       selectedMovie.value = movie;
     };
 
-    const likeMovie = async (movie) => {
-      if (!isLoggedIn.value) {
-        alert("Je moet ingelogd zijn om een film te liken.");
-        return;
-      }
-      await store.dispatch("likeMovie", movie);
+    const likeMovie = (movie) => {
+      store.commit("likeMovie", movie);
     };
 
-    const dislikeMovie = async (movie) => {
-      if (!isLoggedIn.value) {
-        alert("Je moet ingelogd zijn om een film te disliken.");
-        return;
-      }
-      await store.dispatch("dislikeMovie", movie);
+    const dislikeMovie = (movie) => {
+      store.commit("dislikeMovie", movie);
     };
 
     const isLiked = (movie) => {
@@ -48,10 +41,6 @@ export default {
       }
     };
 
-    onMounted(() => {
-      store.dispatch("fetchUserMovies"); // ✅ Likes ophalen bij laden
-    });
-
     return {
       movies,
       likedMovies,
@@ -64,6 +53,7 @@ export default {
       dislikeMovie,
       isLiked,
       isDisliked,
+      activeIndex,
     };
   },
 };
@@ -129,7 +119,7 @@ export default {
 
     <div class="row">
       <div id="videoplr" class="videoplayer col-12">
-        <video controls :src="currentVideo"></video>
+        <video controls autoplay :src="currentVideo"></video>
       </div>
       <div class="btn">
         <a href="#" @click="scrollToTop" class="get-back-up-btn">⬆️ Get Back Up</a>
@@ -146,7 +136,6 @@ export default {
 .btn a{
 padding: 1rem;
 }
-
 
 .btn{
   padding-bottom: 10rem;
@@ -240,6 +229,8 @@ a{
 }
 
 
+
+/* Toegevoegd voor de "Watch Movie" knop bovenaan */
 .watch-button-container {
   position: fixed;
   top: 10px;

@@ -10,7 +10,6 @@ export default {
     const user = ref(store.getters.getUser);
     const movies = ref(store.getters.getMovies);
     const currentVideo = ref(null);
-    console.log(user)
 
     const setVideo = (videoUrl) => {
       store.commit("setVideo", videoUrl);
@@ -86,10 +85,11 @@ export default {
               <RouterLink class="nav-link" to="/login">Login</RouterLink>
             </li>
             <li class="nav-item" v-if="user" style="display: flex; align-items: center;">
-              <a class="nav-link logout-btn" @click="logout">Log out</a>
+              <!-- ✅ E-mail van de ingelogde gebruiker -->
+              <a class="nav-link logout-btn" @click="logout">Uitloggen</a>
             </li>
           </ul>
-          <span v-if="user" class="user-email">{{ user.email }}</span>  
+          <!-- <span class="user-email">{{ user.email }}</span>   -->
         </div>
       </div>
     </nav>
@@ -120,10 +120,6 @@ export default {
 
 
 <style scoped>
-
-.navbar-nav a{
-  color: white !important;
-}
 button {
   background: red;
   color: white;
