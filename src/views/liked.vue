@@ -1,13 +1,32 @@
 <script>
+import { ref, computed, watch } from "vue";
 import { useStore } from "vuex";
 
 export default {
   setup() {
     const store = useStore();
-    let likedMovies = store.getters.getLikedMovies;
+    const likedMovies = ref([...store.getters.getLikedMovies]); // ✅ Reactieve lijst
+
+    const resetLikes = () => {
+      store.commit("resetLikesDislikes");
+      likedMovies.value = []; // ✅ UI direct updaten zonder refresh
+    };
+
+    const showResetButton = computed(() => likedMovies.value.length > 0);
+
+
+    // ✅ UI bijwerken wanneer Vuex-winkel verandert
+    watch(
+      () => store.getters.getLikedMovies,
+      (newLikedMovies) => {
+        likedMovies.value = [...newLikedMovies];
+      }
+    );
 
     return {
       likedMovies,
+      resetLikes,
+      showResetButton
     };
   },
 };
@@ -29,6 +48,7 @@ export default {
               <h3>{{ movie.title }}</h3>
               <p>Status: {{ movie.liked ? "❤️ Geliket" : "💔 Gedisliket" }}</p>
             </div>
+            <a v-if="showResetButton" @click="resetLikes">Reset Likes</a>
           </div>
         </div>
       </div>
@@ -48,6 +68,7 @@ img{
 
 body{
   background: rgb(53, 76, 130);
+  min-height: 82.5vh;
 }
 
 h2{
@@ -58,5 +79,24 @@ h2{
 
 p, h3{
   color: white;
+  text-align: center;
+}
+
+a{
+  color: white !important;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 1rem;
+  font-weight: bold;
+  transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+  max-width: 100%;
+
+
+}
+
+a:hover{
+  scale: 1.1;
+  transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+
 }
 </style>

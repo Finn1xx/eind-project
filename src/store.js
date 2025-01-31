@@ -126,6 +126,11 @@ export const store = createStore({
       localStorage.setItem("likedMovies", JSON.stringify(state.likedMovies)); // ✅ Bewaren in localStorage
     },
 
+    resetLikesDislikes(state) {
+      state.likedMovies = [];
+      localStorage.removeItem("likedMovies"); // Zorgt ervoor dat het uit de opslag verdwijnt
+    },
+
     dislikeMovie: (state, movie) => {
       const index = state.likedMovies.findIndex((m) => m.id === movie.id);
       if (index === -1) {

@@ -23,6 +23,7 @@ export default {
       store.commit("likeMovie", movie);
     };
 
+
     const dislikeMovie = (movie) => {
       store.commit("dislikeMovie", movie);
     };
