@@ -16,6 +16,13 @@ const router = createRouter({
       component: () => import('../views/liked.vue')
     },
     {
+      path: "/movie/:id",
+      name: "movie",
+      component: () => import("../views/movie.vue"),
+      props: true
+    },
+    
+    {
       path: '/register',
       name: 'register',
       component: () => import('../views/register.vue'),

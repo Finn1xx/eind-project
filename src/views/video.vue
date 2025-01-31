@@ -1,29 +1,18 @@
 <script>
 import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const store = useStore();
+    const router = useRouter();
     const movies = computed(() => store.getters.getMovies);
     const likedMovies = computed(() => store.getters.getLikedMovies);
     const currentVideo = computed(() => store.getters.getCurrentVideo);
     const selectedMovie = ref(null);
     const isLoggedIn = computed(() => store.getters.isAuthenticated);
-    const activeIndex = ref(0); // Houdt de actieve slide bij
-
-    // Bijwerken als de gebruiker op een pijltje klikt
-    const updateActiveIndex = (index) => {
-      activeIndex.value = index;
-    };
-
-    onMounted(() => {
-      // Luisteren naar slide events van Bootstrap
-      const carouselElement = document.getElementById("carouselExampleCaptions");
-      carouselElement.addEventListener("slid.bs.carousel", (event) => {
-        activeIndex.value = event.to;
-      });
-    });
+    const activeIndex = ref(0);
 
     const setVideo = (movie) => {
       store.commit("setVideo", movie.video);
@@ -46,27 +35,32 @@ export default {
       return likedMovies.value.some((m) => m.id === movie.id && m.disliked);
     };
 
+    const goToFullMovie = () => {
+      if (selectedMovie.value) {
+        router.push({ name: "movie", params: { id: selectedMovie.value.id } });
+      }
+    };
+
     return {
       movies,
+      likedMovies,
+      currentVideo,
+      selectedMovie,
+      setVideo,
+      goToFullMovie,
+      isLoggedIn,
       likeMovie,
       dislikeMovie,
-      setVideo,
-      currentVideo,
       isLiked,
       isDisliked,
-      selectedMovie,
-      isLoggedIn,
       activeIndex,
-      updateActiveIndex,
     };
   },
 };
 </script>
 
 <template>
-
-
-<div class="carousel-indicators">
+  <div class="carousel-indicators">
     <button
       v-for="(movie, index) in movies"
       :key="index"
@@ -78,7 +72,6 @@ export default {
     ></button>
   </div>
 
-  <!-- De filmcarrousel -->
   <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div
@@ -87,17 +80,14 @@ export default {
         class="carousel-item"
         :class="{ active: index === 0 }"
         :style="{ backgroundImage: 'url(' + movie.image + ')' }"
-      >
-      </div>
+      ></div>
     </div>
 
-    <!-- Vorige knop -->
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
     </button>
 
-    <!-- Volgende knop -->
     <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
@@ -105,24 +95,24 @@ export default {
   </div>
 
   <div class="container-fluid background-color">
-    <div class="row allcards ">
+    <div class="row allcards">
       <div
         v-for="movie in movies"
         :key="movie.id"
         class="card col-4 col-lg-2 col-md-1 card_hover"
         :style="{
-        backgroundImage: `linear-gradient(185deg, rgba(0, 212, 255, 0.4) 13%, rgba(7, 7, 135, 0.8) 57%), url(${movie.image})`,
-        width: '20rem',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-} "
+          backgroundImage: `linear-gradient(185deg, rgba(0, 212, 255, 0.4) 13%, rgba(7, 7, 135, 0.8) 57%), url(${movie.image})`,
+          width: '20rem',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }"
       >
         <div class="card-body">
           <h5 class="card-title">{{ movie.title }}</h5>
           <p class="card-text">{{ movie.text }}</p>
           <button v-if="isLoggedIn" @click="likeMovie(movie)" class="like-btn" :class="{ liked: isLiked(movie) }">👍 Like</button>
           <button v-if="isLoggedIn" @click="dislikeMovie(movie)" class="dislike-btn" :class="{ disliked: isDisliked(movie) }">👎 Dislike</button>
-          <a href="#videoplr" @click="setVideo(movie)" class="button_watch_movie">Watch Movie</a>
+          <a href="#videoplr" @click="setVideo(movie)" class="button_watch_movie">Watch Movie trailer</a>
         </div>
       </div>
     </div>
@@ -132,14 +122,25 @@ export default {
         <video controls autoplay :src="currentVideo"></video>
       </div>
       <div class="btn">
-          <a class="getup" href="#">Click here to get Up</a>
-        </div>
+        <a href="#" @click="scrollToTop" class="get-back-up-btn">⬆️ Get Back Up</a>
+        <a v-if="selectedMovie" @click="goToFullMovie" class="watch-full-movie-btn">🎬 Watch Full Movie</a>
+     </div>
     </div>
   </div>
-
+  
+  
 </template>
 
 <style scoped>
+
+.btn a{
+padding: 1rem;
+}
+
+.btn{
+  padding-bottom: 10rem;
+}
+
 
 a{
   text-decoration: none;

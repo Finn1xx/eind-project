@@ -140,9 +140,11 @@ footer {
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  padding-top: 100px;
+  padding-top: 2rem;
   font-weight: bold;
   color: white;
+  border-top: 0.2rem outset;
+  border-color: white;
 }
 
 
