@@ -1,23 +1,31 @@
 <template>
-  <div class="register-container">
-    <h2>Maak een account aan</h2>
-    <form @submit.prevent="registerUser">
-      <div>
-        <label for="email">E-mail:</label>
-        <input v-model="email" type="email" required />
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-10">
+          <div class="register-container">
+            <h2>Maak een account aan</h2>
+            <form @submit.prevent="registerUser">
+              <div>
+                <label for="email">E-mail:</label>
+                <input v-model="email" type="email" required />
+              </div>
+              <div>
+                <label for="password">Wachtwoord:</label>
+                <input v-model="password" type="password" required minlength="6" />
+              </div>
+              <div>
+                <label for="confirmPassword">Bevestig wachtwoord:</label>
+                <input v-model="confirmPassword" type="password" required />
+              </div>
+              <button type="submit">Registreren</button>
+              <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+            </form>
+          </div>
+        </div>
       </div>
-      <div>
-        <label for="password">Wachtwoord:</label>
-        <input v-model="password" type="password" required minlength="6" />
-      </div>
-      <div>
-        <label for="confirmPassword">Bevestig wachtwoord:</label>
-        <input v-model="confirmPassword" type="password" required />
-      </div>
-      <button type="submit">Registreren</button>
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-    </form>
-  </div>
+    </div>
+  </body>
 </template>
 
 <script>
@@ -55,11 +63,52 @@ export default {
 </script>
 
 <style scoped>
+
+*{
+  color: white;
+}
+body{
+  background: rgb(53, 76, 130);
+  height: 77vh;
+}
+
+h2{
+  padding-bottom: 2rem;
+  text-align: center;
+}
+
+button, input{
+  color: black;
+}
+
+button{
+  text-align: center;
+  margin-top: 2rem;
+}
+
+form div{
+  display: flex;
+  justify-content: space-between;
+}
+
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.row{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .register-container {
   max-width: 400px;
   margin: auto;
   padding: 20px;
-  border: 1px solid #ccc;
   border-radius: 8px;
 }
 .error {

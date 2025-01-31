@@ -136,31 +136,14 @@ export default {
         </div>
     </div>
   </div>
-  <footer>
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-12">
-          <p>©2023 FinnSiepers Netherlands, Inc. All rights reserved.</p>
-        </div>
-        <div class="col-12 d-flex justify-content-center">
-          <ul class="d-flex justify-content-center">
-            <li><a href="">Privacy Policy</a></li>
-            <li><a href="">Terms & Conditions</a></li>
-            <li><a href="">Cookies Policy</a></li>
-            <li><a href="">Return Policy</a></li>
-            <li><a href="">Disclaimer</a></li>
-            <li><a href="">EULA</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </footer>
+
 </template>
 
 <style scoped>
 
 a{
   text-decoration: none;
+  font-weight: bold;
 }
 
 .allcards {
@@ -244,16 +227,7 @@ a{
   background-position: center;
 }
 
-footer {
-  background: rgb(26, 58, 130);
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 100px;
-  font-weight: bold;
-  color: white;
-}
+
 
 /* Toegevoegd voor de "Watch Movie" knop bovenaan */
 .watch-button-container {

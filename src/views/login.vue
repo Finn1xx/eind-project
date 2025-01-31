@@ -34,18 +34,45 @@ export default {
 </script>
 
 <template>
-  <div>
-    <h2>Login</h2>
-    <form @submit.prevent="login">
-      <input v-model="email" type="email" placeholder="Email" required />
-      <input v-model="password" type="password" placeholder="Wachtwoord" required />
-      <button type="submit">Inloggen</button>
-    </form>
-    <p v-if="errorMessage">{{ errorMessage }}</p>
-  </div>
+  
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-10">
+          <h2>Login</h2>
+          <form @submit.prevent="login">
+            <input v-model="email" type="email" placeholder="Email" required />
+            <input v-model="password" type="password" placeholder="Wachtwoord" required />
+            <button type="submit">Inloggen</button>
+          </form>
+          <p v-if="errorMessage">{{ errorMessage }}</p>
+        </div>
+      </div>
+    </div>
+  </body>
 </template>
 
 <style scoped>
+
+body{
+  background: rgb(53, 76, 130);
+  height: 77vh;
+}
+
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.row{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .login-container {
 max-width: 300px;
 margin: 50px auto;
@@ -72,4 +99,6 @@ cursor: pointer;
 color: red;
 margin-top: 10px;
 }
+
+
 </style>

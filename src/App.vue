@@ -86,17 +86,38 @@ export default {
             </li>
             <li class="nav-item" v-if="user" style="display: flex; align-items: center;">
               <!-- ✅ E-mail van de ingelogde gebruiker -->
-              <span class="user-email">{{ user.email }}</span>  
               <a class="nav-link logout-btn" @click="logout">Uitloggen</a>
             </li>
           </ul>
+          <!-- <span class="user-email">{{ user.email }}</span>   -->
         </div>
       </div>
     </nav>
   </header>
 
+  
   <RouterView />
+  <footer>
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-12">
+          <p>©2023 FinnSiepers Netherlands, Inc. All rights reserved.</p>
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+          <ul class="d-flex justify-content-center">
+            <li><a href="">Privacy Policy</a></li>
+            <li><a href="">Terms & Conditions</a></li>
+            <li><a href="">Cookies Policy</a></li>
+            <li><a href="">Return Policy</a></li>
+            <li><a href="">Disclaimer</a></li>
+            <li><a href="">EULA</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
 </template>
+
 
 <style scoped>
 button {
@@ -107,4 +128,23 @@ button {
   cursor: pointer;
   font-weight: bold;
 }
+
+.user-email{
+  font-weight: bold;
+  color: white;
+}
+
+footer {
+  background: rgb(26, 58, 130);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 100px;
+  font-weight: bold;
+  color: white;
+}
+
+
+
 </style>
