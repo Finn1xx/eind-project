@@ -17,6 +17,7 @@ export default {
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
         store.commit("setUser", userCredential.user); // Zet gebruiker in Vuex
+        await store.dispatch("fetchUserMovies"); // ✅ Haal gelikete films op na inloggen
         router.push("/"); // Stuur naar homepagina
       } catch (error) {
         errorMessage.value = "Fout bij inloggen: " + error.message;
@@ -42,8 +43,8 @@ export default {
           <h2>Login</h2>
           <form @submit.prevent="login">
             <input v-model="email" type="email" placeholder="Email" required />
-            <input v-model="password" type="password" placeholder="Wachtwoord" required />
-            <button type="submit">Inloggen</button>
+            <input v-model="password" type="password" placeholder="Password" required />
+            <button type="submit">Login</button>
           </form>
           <p v-if="errorMessage">{{ errorMessage }}</p>
         </div>
@@ -56,7 +57,7 @@ export default {
 
 body{
   background: rgb(53, 76, 130);
-  height: 77vh;
+  height: 82.5vh;
 }
 
 .container{

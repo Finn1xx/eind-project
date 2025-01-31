@@ -23,23 +23,55 @@ export default {
 </script>
 
 <template>
-  <div v-if="movie" class="movie-container">
-    <h1>{{ movie.title }}</h1>
-    <video controls autoplay :src="movie.video"></video>
-  </div>
-  <div v-else>
-    <p>Loading movie...</p>
-  </div>
+    <body>
+        <div class="container d-flex justify-content-center">
+            <div class="row">
+                <div class="col-12">
+                    <div v-if="movie" class="movie-container">
+                      <h1>{{ movie.title }}</h1>
+                      <video controls :src="movie.video"></video>
+                        <div class="col-4">
+                            <p class="card-text">{{ movie.text }}</p>
+                        </div>
+                    </div>
+                    <div v-else>
+                      <p>Loading movie...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </template>
 
 <style scoped>
+
+*{
+    color: white;
+}
 .movie-container {
   text-align: center;
   padding: 20px;
 }
 
-video {
-  width: 80%;
-  max-width: 1000px;
+h1{
+    padding-bottom: 2rem;
 }
+
+video{
+  width: 100%;
+}
+
+.col-4{
+    text-align: left;
+}
+
+
+body{
+  background: rgb(53, 76, 130);
+  height: 82.5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 </style>

@@ -1,6 +1,8 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore"; // 🔹 Firestore importeren
+
 
 // 🔹 Vul hier je eigen Firebase-configuratie in 🔹
 const firebaseConfig = {
@@ -15,5 +17,7 @@ const firebaseConfig = {
 // Firebase initialiseren
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app); // 🔹 Firestore initialiseren
 
-export { auth };
+
+export { auth, db };

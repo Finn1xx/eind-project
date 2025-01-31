@@ -19,17 +19,18 @@ export default {
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <h2>Mijn Gelikete Films</h2>
+          <h2>My movies</h2>
           <div v-if="likedMovies.length === 0">
-            <p>Je hebt nog geen films geliket.</p>
+            <p>You havent liked any movies.</p>
           </div>
-          <div v-else>
-            <div v-for="movie in likedMovies" :key="movie.id" class="movie-card">
+          <div class="row d-flex justify-content-center"  v-else>
+            <div v-for="movie in likedMovies" :key="movie.id" class="movie-card col-5">
               <img :src="movie.image" :alt="movie.title" />
               <h3>{{ movie.title }}</h3>
               <p>Status: {{ movie.liked ? "❤️ Geliket" : "💔 Gedisliket" }}</p>
             </div>
           </div>
+          <a class="backto"> <RouterLink class="nav-link" to="/">Back to movies</RouterLink></a>
         </div>
       </div>
     </div>
@@ -37,6 +38,22 @@ export default {
 </template>
 
 <style scoped>
+.backto{
+  display: flex;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding-bottom: 2rem;
+}
+.backto a{
+  transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+}
+
+.backto a:hover{
+  transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+}
+
 .movie-card {
   padding: 10px;
   margin: 10px;

@@ -4,21 +4,21 @@
       <div class="row">
         <div class="col-10">
           <div class="register-container">
-            <h2>Maak een account aan</h2>
+            <h2>Make account</h2>
             <form @submit.prevent="registerUser">
               <div>
                 <label for="email">E-mail:</label>
                 <input v-model="email" type="email" required />
               </div>
               <div>
-                <label for="password">Wachtwoord:</label>
+                <label for="password">Password:</label>
                 <input v-model="password" type="password" required minlength="6" />
               </div>
               <div>
-                <label for="confirmPassword">Bevestig wachtwoord:</label>
+                <label for="confirmPassword">Confirm password:</label>
                 <input v-model="confirmPassword" type="password" required />
               </div>
-              <button type="submit">Registreren</button>
+              <button type="submit">Register</button>
               <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
             </form>
           </div>
@@ -69,7 +69,7 @@ export default {
 }
 body{
   background: rgb(53, 76, 130);
-  height: 77vh;
+  height: 82.5vh;
 }
 
 h2{
@@ -84,6 +84,17 @@ button, input{
 button{
   text-align: center;
   margin-top: 2rem;
+  border-radius: .3rem;
+  border: none;
+  transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+  background-color: #007bff;
+  color: white;
+}
+
+button:hover{
+  scale: 1.1;
+  transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+
 }
 
 form div{

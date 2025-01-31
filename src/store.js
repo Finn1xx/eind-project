@@ -1,4 +1,7 @@
 import { createStore } from "vuex";
+import { db } from "@/firebase";
+import { doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+
 
 export const store = createStore({
   state() {
@@ -85,6 +88,7 @@ movies: [
     video: "/src/assets/dark.mp4",
   },
 ]
+
     };
   },
 
@@ -92,12 +96,16 @@ movies: [
     getMovies: (state) => state.movies,
     getCurrentVideo: (state) => state.currentVideo,
     getLikedMovies: (state) => state.likedMovies,
-    isAuthenticated: (state) => state.user !== null, // ✅ Zorg ervoor dat isAuthenticated juist werkt
+    isAuthenticated: (state) => state.user !== null,
   },
 
   mutations: {
     setVideo: (state, videoUrl) => {
       state.currentVideo = videoUrl;
+    },
+
+    setLikedMovies: (state, likedMovies) => {
+      state.likedMovies = likedMovies;
     },
 
     likeMovie: (state, movie) => {
@@ -108,7 +116,6 @@ movies: [
         state.likedMovies[index].liked = true;
         state.likedMovies[index].disliked = false;
       }
-      localStorage.setItem("likedMovies", JSON.stringify(state.likedMovies)); // ✅ Bewaren in localStorage
     },
 
     dislikeMovie: (state, movie) => {
@@ -119,19 +126,57 @@ movies: [
         state.likedMovies[index].liked = false;
         state.likedMovies[index].disliked = true;
       }
-      localStorage.setItem("likedMovies", JSON.stringify(state.likedMovies)); // ✅ Bewaren in localStorage
     },
 
     setUser: (state, user) => {
-      console.log("Ingelogde gebruiker:", user); // Debugging
+      console.log("Ingelogde gebruiker:", user);
       state.user = user;
-      localStorage.setItem("user", JSON.stringify(user)); // ✅ Ingelogde gebruiker opslaan
+      localStorage.setItem("user", JSON.stringify(user));
     },
 
     logoutUser: (state) => {
       state.user = null;
-      localStorage.removeItem("user"); // ✅ Uitloggen en verwijderen uit storage
+      state.likedMovies = []; // ✅ Maak likedMovies leeg bij uitloggen
+      localStorage.removeItem("user");
       console.log("User is uitgelogd");
     },
   },
+
+  actions: {
+    async fetchUserMovies({ commit, state }) {
+      if (!state.user) return;
+
+      const userRef = doc(db, "users", state.user.uid);
+      const docSnap = await getDoc(userRef);
+
+      if (docSnap.exists()) {
+        commit("setLikedMovies", docSnap.data().likedMovies || []);
+      } else {
+        await setDoc(userRef, { likedMovies: [] });
+        commit("setLikedMovies", []);
+      }
+    },
+
+    async likeMovie({ commit, state }, movie) {
+      if (!state.user) return;
+
+      const userRef = doc(db, "users", state.user.uid);
+      await updateDoc(userRef, {
+        likedMovies: arrayUnion({ id: movie.id, liked: true, disliked: false }),
+      });
+
+      commit("likeMovie", movie);
+    },
+
+    async dislikeMovie({ commit, state }, movie) {
+      if (!state.user) return;
+
+      const userRef = doc(db, "users", state.user.uid);
+      await updateDoc(userRef, {
+        likedMovies: arrayUnion({ id: movie.id, liked: false, disliked: true }),
+      });
+
+      commit("dislikeMovie", movie);
+    }
+  }
 });
